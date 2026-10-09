@@ -1,0 +1,70 @@
+# Master switch. When false, legacy static-lambda P-OPD is used.
+enable: false
+
+# Macro layer: adaptive trust-region budget B_k.
+#   budget_adaptive_enable=true  -> B_k changes over training
+#   budget_adaptive_enable=false -> fixed B from budget_init_* only
+budget_adaptive_enable: true
+
+# When budget_adaptive_enable=true, choose the adaptation signal:
+#   proxy_kl   - each OPD step: B_k = current-batch teacher proxy displacement (default)
+#   target_transfer_kl - EMA of KL(softmax(log pi_ref+d) || pi_ref), estimated
+#                        on the OPD top-k candidate set
+#   val_reward - periodic Adam-SNR update from a2opd validation reward
+budget_adaptive_source: proxy_kl
+
+# Meso layer: dual update adjusts lambda to track the current budget B.
+lambda_dual_enable: true
+
+# Micro layer: token emphasis via I_t estimated on student top-k candidates.
+# Requires algorithm.hetero_distill.opd_top_k > 0.
+token_sampling_enable: false
+
+# Center utility before policy update. Top-k advantages are PG contributions
+# A_k = p_k * (u_k - b), where p_k = softmax(old_log_probs) over the K candidates.
+# Top-k (opd_top_k>0): none=off, state/batch/sequence/group=on.
+# Single-token (opd_top_k=0): none | batch | sequence | group (state not supported).
+baseline_mode: state   # none | state | batch | sequence | group
+
+# Used only when budget_adaptive_enable=false, or as one-time init before proxy/val adaptation.
+budget_init_mode: proxy_kl   # proxy_kl | manual
+
+budget_init_manual: 0.1
+
+budget_min: 1.0e-3
+
+budget_max: 10.0
+
+budget_eta: 0.01
+
+budget_beta1: 0.9
+
+budget_beta2: 0.99
+
+budget_epsilon: 1.0e-8
+
+# target_transfer_kl source only: B_k = (1-tau) B_{k-1} + tau B_tr_hat.
+budget_transfer_ema_tau: 0.05
+
+# val_reward source only: run data.a2opd_val_files every K global steps.
+budget_update_interval: 10
+
+# val_reward source only. Example: val-core/math_avg/mean@4
+budget_reward_metric: ""
+
+budget_val_n: 8
+
+# Macro-average group/sources for A²OPD budget validation only.
+val_aggregate_group: ""
+
+val_aggregate_sources: null
+
+lambda_init: 1.0
+
+lambda_min: 0.01
+
+lambda_max: 10
+
+lambda_eta: 1
+
+token_sampling_eps: 1.0e-8

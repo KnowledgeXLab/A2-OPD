@@ -1,0 +1,19 @@
+{
+  "exclude": [
+    "models",
+    "data",
+    "logs",
+    "wandb",
+    "plt",
+    "verl/checkpoints",
+    "verl/outputs",
+    "verl/wandb",
+    "verl/debug_data",
+    "verl/logs",
+    "code_eval/data",
+    "**/__pycache__",
+    "**/.git",
+    "**/.pytest_cache",
+    "**/*.egg-info"
+  ]
+}
