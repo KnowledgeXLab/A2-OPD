@@ -90,9 +90,8 @@ Paper-trained checkpoints are hosted on **[KnowledgeXLab/P-OPD_Experiments](http
 | [Qwen3-1.7B-Math-GRPO-Steps500](https://huggingface.co/KnowledgeXLab/P-OPD_Experiments/tree/main/Qwen3-1.7B-Math-GRPO-Steps500) | Proxy expert | DeepMath-103K · GRPO · 500 steps |
 | [Qwen3-1.7B-Math-GRPO-Steps800](https://huggingface.co/KnowledgeXLab/P-OPD_Experiments/tree/main/Qwen3-1.7B-Math-GRPO-Steps800) | Proxy expert | DeepMath-103K · GRPO · 800 steps |
 | [Qwen3-4B-Math-GRPO-Early-RL](https://huggingface.co/KnowledgeXLab/P-OPD_Experiments/tree/main/Qwen3-4B-Math-GRPO-Early-RL) | Proxy expert | Early-stage RL checkpoint |
-| [Qwen3-4B-Non-Thinking-RL-Math-Step500](https://huggingface.co/Keven16/Qwen3-4B-Non-Thinking-RL-Math-Step500) | Proxy expert | G-OPD public · DeepMath · GRPO · 500 steps |
-| [Qwen3-4B-Non-Thinking-RL-Math-Step1200](https://huggingface.co/Keven16/Qwen3-4B-Non-Thinking-RL-Math-Step1200) | Proxy expert | G-OPD public · DeepMath · GRPO · 1200 steps |
-| [Qwen3-8B-Math-GRPO-Steps400](https://huggingface.co/KnowledgeXLab/P-OPD_Experiments/tree/main/Qwen3-8B-Math-GRPO-Steps400) | Target baseline | DeepMath-103K · GRPO · 400 steps |
+| [Qwen3-4B-Non-Thinking-RL-Math-Step500](https://huggingface.co/Keven16/Qwen3-4B-Non-Thinking-RL-Math-Step500) | Proxy expert | DeepMath · GRPO · 500 steps |
+| [Qwen3-4B-Non-Thinking-RL-Math-Step1200](https://huggingface.co/Keven16/Qwen3-4B-Non-Thinking-RL-Math-Step1200) | Proxy expert | DeepMath · GRPO · 1200 steps |
 
 
 ### SFT checkpoints (Math)
@@ -105,7 +104,7 @@ Paper-trained checkpoints are hosted on **[KnowledgeXLab/P-OPD_Experiments](http
 
 | Checkpoint | Role | Training |
 |------------|------|----------|
-| [Qwen3-4B-Non-Thinking-RL-Code-Step300](https://huggingface.co/Keven16/Qwen3-4B-Non-Thinking-RL-Code-Step300) | Proxy expert | G-OPD public · Eurus-RL-Code · GRPO · 300 steps |
+| [Qwen3-4B-Non-Thinking-RL-Code-Step300](https://huggingface.co/Keven16/Qwen3-4B-Non-Thinking-RL-Code-Step300) | Proxy expert | Eurus-RL-Code · GRPO · 300 steps |
 
 Download checkpoints under `./models/` (or set `A2OPD_MODEL_ROOT`):
 
@@ -122,7 +121,7 @@ export A2OPD_DATA_ROOT=$PWD/data   # default layout matches training/eval script
 | Path | Split | Used for |
 |------|-------|----------|
 | `math/train.parquet` | train | DeepMath-103K training |
-| `math/test.parquet` | test | Training validation **and** offline math eval |
+| `math/test.parquet` | test | Training validation and offline math eval |
 | `code/train.parquet` | train | Eurus-RL-Code training |
 | `code/validation.parquet` | validation | Training validation during code RL |
 | `code/benchmarks/Humaneval_Plus/HumanEvalPlus.jsonl` | test | Offline HumanEval+ |
@@ -167,7 +166,7 @@ Checkpoints are saved under `checkpoints/` (override via `A2OPD_CKPT_ROOT`).
 # Math offline benchmarks
 bash scripts/eval/math_eval/run_eval_math.sh
 
-# Code — HumanEval+ / MBPP+
+# Code — HumanEval+ / MBPP+ / LiveCodeBench
 bash scripts/eval/code_eval/run_eval_code.sh
 
 # Offline distribution KL analysis
@@ -178,16 +177,14 @@ exp_path=/path/to/run bash scripts/a2opd_distribution_kl_eval.sh
 
 ```
 A2-OPD/
-├── scripts/                    # Training, eval, checkpoint merge, path helpers
-│   ├── a2opd_math.sh
-│   ├── a2opd_code.sh
-│   ├── a2opd_distribution_kl_eval.sh
-│   ├── merge_checkpoints.sh
-│   └── opd_paths.sh
-├── verl/                       # Vendored verl + A2-OPD implementation
-├── code_eval/                  # EvalPlus & LiveCodeBench
-├── math_eval_server/           # HTTP math verification for Ray workers
-└── scripts/eval/               # Thin wrappers for benchmark scripts
+├── scripts/                    # Training, eval, path helpers
+│   ├── a2opd_math.sh / a2opd_code.sh
+│   ├── merge_checkpoints.sh / opd_paths.sh
+│   └── eval/
+│       ├── math_eval/          # Math eval entry
+│       └── code_eval/          # Code eval entry
+├── verl/                       # verl + A2-OPD implementation
+└── math_eval_server/           # HTTP math verification for Ray workers
 ```
 
 ## 🙏 Acknowledgements
@@ -221,7 +218,3 @@ If you find this work helpful, please cite:
   url     = {https://github.com/KnowledgeXLab/A2-OPD}
 }
 ```
-
-## 📄 License
-
-Apache License 2.0 — see [LICENSE](LICENSE).
