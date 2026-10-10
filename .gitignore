@@ -208,20 +208,13 @@ outputs
 # data
 *.parquet
 
-eval_outputs/
-plots/
 verl/debug_data/
-
-plots/
-plots_distribution/
-
-ref_code/
-
-data/
 
 data
 
 models
+checkpoints
+results
 
 plt/
 
@@ -269,3 +262,13 @@ verl/input_file
 verl/input_file*
 verl/output_file.txt
 scripts/eval/code_eval/coding/LiveCodeBench/my_directory/
+
+# Local HF upload helpers (maintained locally, not for public repo)
+scripts/hf_open_source_release.md
+scripts/hf_upload.sh
+scripts/hf_upload-H.sh
+scripts/rjob_hf_upload.sh
+scripts/submit_hf_upload-H.sh
+
+# Local paper PDF
+A2_OPD_Arxiv*.pdf

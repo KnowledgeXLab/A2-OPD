@@ -23,7 +23,7 @@ export RAY_memory_usage_threshold=0.85
 
 cst_date() { TZ='UTC-8' date "$@"; }
 
-prompt_files="${prompt_files:-${OPD_PUBLIC_DATA_ROOT}/G-OPD-Training-Data/DeepMath-103K/train_filtered_level6-sample500_seed42.parquet}"
+prompt_files="${prompt_files:-${A2OPD_DATA_ROOT}/math/train-sample500_seed42.parquet}"
 distribution_kl_max_samples="${distribution_kl_max_samples:--1}"
 distribution_kl_batch_size="${distribution_kl_batch_size:-128}"
 distribution_kl_do_sample="${distribution_kl_do_sample:-true}"
@@ -39,9 +39,9 @@ n_gpu="${n_gpu:-8}"
 nccl_timeout="${nccl_timeout:-7200}"
 log_dir="${REPO_ROOT}/logs/a2_opd/distribution_kl"
 today_sec=$(cst_date +%Y%m%d_%H%M%S)
-summary_csv="${summary_csv:-${OPD_DISTRIBUTION_KL_RESULT_ROOT}/distribution_kl_summary_${today_sec}.csv}"
+summary_csv="${summary_csv:-${A2OPD_DISTRIBUTION_KL_RESULT_ROOT}/distribution_kl_summary_${today_sec}.csv}"
 
-mkdir -p "${log_dir}" "${OPD_DISTRIBUTION_KL_RESULT_ROOT}" "$(dirname "${summary_csv}")"
+mkdir -p "${log_dir}" "${A2OPD_DISTRIBUTION_KL_RESULT_ROOT}" "$(dirname "${summary_csv}")"
 
 distribution_kl_batch_mode=false
 
@@ -112,11 +112,11 @@ resolve_distribution_kl_result_dir() {
     local exp_label
     if [[ "${job_ckpt_slot}" == "base" ]]; then
         exp_label="${exp_path}"
-        echo "${OPD_DISTRIBUTION_KL_RESULT_ROOT}/fixed_rollout/${exp_label}/base"
+        echo "${A2OPD_DISTRIBUTION_KL_RESULT_ROOT}/fixed_rollout/${exp_label}/base"
         return 0
     fi
     exp_label="$(basename "${exp_path}")"
-    echo "${OPD_DISTRIBUTION_KL_RESULT_ROOT}/${exp_label}/${job_ckpt_slot}"
+    echo "${A2OPD_DISTRIBUTION_KL_RESULT_ROOT}/${exp_label}/${job_ckpt_slot}"
 }
 
 resolve_distribution_kl_job_paths() {
@@ -421,7 +421,7 @@ if [[ -n "${eval_jobs:-}" ]]; then
         exit 1
     fi
     if [[ "${eval_jobs}" == *ref_overlap* ]]; then
-        distribution_kl_rollout_cache="${OPD_DISTRIBUTION_KL_RESULT_ROOT}/fixed_rollout/Qwen3-8B_base/rollout_cache.pkl"
+        distribution_kl_rollout_cache="${A2OPD_DISTRIBUTION_KL_RESULT_ROOT}/fixed_rollout/Qwen3-8B_base/rollout_cache.pkl"
     fi
     distribution_kl_batch_mode=true
     init_distribution_kl_batch_log "${eval_jobs}"
@@ -464,7 +464,7 @@ if [[ -n "${eval_jobs:-}" ]]; then
 else
     if [[ -z "${exp_path:-}" ]]; then
         echo "ERROR: set exp_path to the training run directory (trainer.default_local_dir)." >&2
-        echo "       Example: exp_path=${OPD_A2OPD_MODEL_ROOT}/A2OPD@16-math/S_..._A2OPD_20260816_1954" >&2
+        echo "       Example: exp_path=${A2OPD_CKPT_ROOT}/A2OPD@16-math/S_..._A2OPD_20260816_1954" >&2
         exit 1
     fi
 
@@ -472,9 +472,9 @@ else
     teacher_model_name="${teacher_model_name:-Qwen3-4B}"
     teacher_base_model_name="${teacher_base_model_name:-Qwen3-1.7B}"
 
-    student_base_path="${student_base_path:-${OPD_PUBLIC_MODEL_ROOT}/${student_model_name}}"
-    teacher_expert_path="${teacher_expert_path:-${OPD_PUBLIC_MODEL_ROOT}/${teacher_model_name}}"
-    teacher_base_path="${teacher_base_path:-${OPD_PUBLIC_MODEL_ROOT}/${teacher_base_model_name}}"
+    student_base_path="${student_base_path:-${A2OPD_MODEL_ROOT}/${student_model_name}}"
+    teacher_expert_path="${teacher_expert_path:-${A2OPD_MODEL_ROOT}/${teacher_model_name}}"
+    teacher_base_path="${teacher_base_path:-${A2OPD_MODEL_ROOT}/${teacher_base_model_name}}"
 
     run_one_distribution_kl_eval \
         "${exp_path}" \

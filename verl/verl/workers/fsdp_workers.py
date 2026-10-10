@@ -1693,7 +1693,7 @@ class ActorRolloutRefWorker(Worker, DistProfilerExtension):
 
         meta_info knobs:
           - top_k: 0 = full-vocab response-token log probs; >0 = student top-k ids + log probs
-          - opd_include_base: run student-base / teacher / teacher-base forwards (hetero OPD)
+          - opd_include_base: also forward student-base, teacher, and teacher-base models
           - opd_parallel_student_base: 3-way vs 2-way parallel when opd_include_base=True
           - opd_ref_on_actor: LoRA ref top-k on actor worker (standard OPD)
           - opd_ref_output_key: tensor key for opd_ref_on_actor output (default teacher_log_probs)

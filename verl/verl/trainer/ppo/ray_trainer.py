@@ -2251,7 +2251,7 @@ class RayPPOTrainer:
         return batch, entropys, timing_metrics
 
     def _prepare_opd_update_batch(self, update_batch: DataProto) -> tuple[DataProto, dict]:
-        """Hetero OPD update: student + base + teacher + teacher-base log probs."""
+        """Prepare OPD update with log probs from student-base, teacher, and teacher-base."""
         update_batch, _, timing_metrics = self._prepare_opd_batch(
             update_batch,
             include_base=True,

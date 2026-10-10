@@ -20,9 +20,6 @@ cst_date() { TZ='UTC-8' date "$@"; }
 
 export RAY_memory_usage_threshold=0.85
 
-
-: "${WANDB_API_KEY:?Set WANDB_API_KEY before running}"
-
 # student 8B, teacher 4B (proxy expert + base)
 student_model_name="${student_model_name:-Qwen3-8B}"
 teacher_model_name="${teacher_model_name:-Qwen3-4B-Non-Thinking-RL-Math-Step500}" # proxy expert
@@ -44,12 +41,12 @@ cd "${VERL_ROOT}"
 export PYTHONPATH="${VERL_ROOT}:${PYTHONPATH:-}"
 export MATH_VERIFY_SERVER_URL
 
-test_files="${OPD_MATH_TEST_FILE}"
-train_files="${OPD_MATH_TRAIN_FILE}"
+test_files="${A2OPD_MATH_TEST_FILE}"
+train_files="${A2OPD_MATH_TRAIN_FILE}"
 
-student_model_path="${OPD_PUBLIC_MODEL_ROOT}/${student_model_name}"
-teacher_model_path="${OPD_PUBLIC_MODEL_ROOT}/${teacher_model_name}"
-teacher_base_model_path="${OPD_PUBLIC_MODEL_ROOT}/${teacher_base_model_name}"
+student_model_path="${A2OPD_MODEL_ROOT}/${student_model_name}"
+teacher_model_path="${A2OPD_MODEL_ROOT}/${teacher_model_name}"
+teacher_base_model_path="${A2OPD_MODEL_ROOT}/${teacher_base_model_name}"
 
 today=$(cst_date +%Y%m%d_%H%M)
 today_sec=$(cst_date +%Y%m%d_%H%M%S)
@@ -58,19 +55,6 @@ use_opd=true
 opd_top_k=${opd_top_k:-16}   # required for A²OPD token_sampling (micro layer)
 lambda_vals=1.0
 student_rollout_n=1
-
-# A²OPD configs: macro B from target-space transfer KL each OPD step.
-# This uses the current OPD top-k candidates to approximate
-# KL(softmax(log pi_target_base + d) || pi_target_base).
-a2opd_enable=${a2opd_enable:-true}
-a2opd_budget_adaptive_enable=${a2opd_budget_adaptive_enable:-false}
-a2opd_budget_adaptive_source=${a2opd_budget_adaptive_source:-target_transfer_kl}  # proxy_kl | target_transfer_kl
-a2opd_budget_transfer_ema_tau=${a2opd_budget_transfer_ema_tau:-0.02}
-a2opd_lambda_dual_enable=${a2opd_lambda_dual_enable:-false}
-a2opd_token_sampling_enable=${a2opd_token_sampling_enable:-false}
-a2opd_baseline_mode=${a2opd_baseline_mode:-state}   # top-k: none=off | state/batch/sequence/group=on
-a2opd_lambda_init=${a2opd_lambda_init:-1.0}
-a2opd_lambda_eta=${a2opd_lambda_eta:-1}
 
 # actor param offload: set false when GPU memory allows (skips actor CPU<->GPU each step)
 actor_param_offload=true
@@ -101,7 +85,6 @@ total_training_steps=${total_training_steps:-80}
 project_name=A2OPD@${val_n}-math
 
 resume_path=${resume_path:-""}
-# resume_path="${OPD_A2OPD_MODEL_ROOT}/A2OPD@16-math/S_Qwen3-8B-T_4B_Math_RL_Step500_A2OPD_20260816_1954/best_valid"
 
 
 extra_args=()
@@ -127,12 +110,12 @@ while [[ $# -gt 0 ]]; do
 done
 set -- "${extra_args[@]}"
 
-output_model_name="S_${student_tag}-T_${teacher_tag}-TopK${opd_top_k}-${a2opd_baseline_mode}"
+output_model_name="S_${student_tag}-T_${teacher_tag}-TopK${opd_top_k}"
 
 resolve_run_from_resume_path() {
     local rp resolved project_dir rel
     rp="$(readlink -f "$1")"
-    project_dir="$(readlink -f "${OPD_A2OPD_MODEL_ROOT}/${project_name}")"
+    project_dir="$(readlink -f "${A2OPD_CKPT_ROOT}/${project_name}")"
     if [[ "$rp" != "${project_dir}/"* ]]; then
         echo "ERROR: resume_path must be under ${project_dir}, got: $1" >&2
         return 1
@@ -152,7 +135,7 @@ if [[ -n "$resume_path" ]]; then
     )
 else
     experiment_name="${output_model_name}_A2OPD_${today}"
-    output_path="${OPD_A2OPD_MODEL_ROOT}/${project_name}/${experiment_name}"
+    output_path="${A2OPD_CKPT_ROOT}/${project_name}/${experiment_name}"
 fi
 
 # --- logging (timestamp + experiment name) ---
@@ -187,7 +170,6 @@ log_info "experiment=${experiment_name}"
 log_info "output_path=${output_path}"
 log_info "student=${student_model_path}"
 log_info "teacher=${teacher_model_path} (base=${teacher_base_model_path})"
-log_info "a2opd enable=${a2opd_enable} budget_adaptive=${a2opd_budget_adaptive_enable} budget_source=${a2opd_budget_adaptive_source} budget_transfer_ema_tau=${a2opd_budget_transfer_ema_tau} lambda_dual=${a2opd_lambda_dual_enable} lambda_eta=${a2opd_lambda_eta} token_sampling=${a2opd_token_sampling_enable}"
 log_info "use_opd=${use_opd} opd_top_k=${opd_top_k} resume_path=${resume_path:-<none>}"
 log_info "total_epochs=${total_epochs} total_training_steps=${total_training_steps:-<auto>}"
 log_info "math_verify_server=${MATH_VERIFY_SERVER_URL:-<unset>}"
@@ -213,15 +195,6 @@ python3 -m verl.trainer.main_ppo \
     +algorithm.hetero_distill.update_mode=$update_mode \
     +algorithm.hetero_distill.opd_top_k=$opd_top_k \
     +algorithm.hetero_distill.opd_parallel_student_base=$opd_parallel_student_base \
-    algorithm.a2opd.enable=$a2opd_enable \
-    algorithm.a2opd.budget_adaptive_enable=$a2opd_budget_adaptive_enable \
-    algorithm.a2opd.budget_adaptive_source=$a2opd_budget_adaptive_source \
-    algorithm.a2opd.budget_transfer_ema_tau=$a2opd_budget_transfer_ema_tau \
-    algorithm.a2opd.lambda_dual_enable=$a2opd_lambda_dual_enable \
-    algorithm.a2opd.token_sampling_enable=$a2opd_token_sampling_enable \
-    algorithm.a2opd.baseline_mode=$a2opd_baseline_mode \
-    algorithm.a2opd.lambda_init=$a2opd_lambda_init \
-    algorithm.a2opd.lambda_eta=$a2opd_lambda_eta \
     data.train_files=$train_files \
     data.val_files=$test_files \
     data.train_batch_size=1024 \

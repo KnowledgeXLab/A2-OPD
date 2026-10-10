@@ -1,6 +1,6 @@
 #!/bin/bash
-# Shared filesystem layout for OPD scripts.
-# Override any OPD_* variable when mounts differ across environments.
+# Shared filesystem layout for A2-OPD scripts.
+# Override any A2OPD_* variable when mounts differ across environments.
 
 if [[ -z "${REPO_ROOT:-}" ]]; then
     _OPD_PATHS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -8,22 +8,17 @@ if [[ -z "${REPO_ROOT:-}" ]]; then
     unset _OPD_PATHS_DIR
 fi
 
-export OPD_DATA_ROOT=${OPD_DATA_ROOT:-$REPO_ROOT/data/opd}
-export OPD_MODEL_ROOT=${OPD_MODEL_ROOT:-$REPO_ROOT/models}
-export OPD_PUBLIC_MODEL_ROOT=${OPD_PUBLIC_MODEL_ROOT:-$OPD_MODEL_ROOT/public}
-export OPD_TEACHER_MODEL_ROOT=${OPD_TEACHER_MODEL_ROOT:-$OPD_PUBLIC_MODEL_ROOT}
-export OPD_A2OPD_MODEL_ROOT=${OPD_A2OPD_MODEL_ROOT:-$OPD_MODEL_ROOT/a2opd}
-export OPD_MULTI_OPD_MODEL_ROOT=${OPD_MULTI_OPD_MODEL_ROOT:-$OPD_MODEL_ROOT/multi_opd}
-export OPD_A2OPD_RESULT_ROOT=${OPD_A2OPD_RESULT_ROOT:-$REPO_ROOT/data/a2opd/results}
-export OPD_EXP_RESULT_ROOT=${OPD_EXP_RESULT_ROOT:-$OPD_A2OPD_RESULT_ROOT/benchmark_eval}
-export OPD_DISTRIBUTION_KL_RESULT_ROOT=${OPD_DISTRIBUTION_KL_RESULT_ROOT:-$OPD_A2OPD_RESULT_ROOT/a2opd_distribution_kl}
+export A2OPD_DATA_ROOT=${A2OPD_DATA_ROOT:-$REPO_ROOT/data}
+export A2OPD_MODEL_ROOT=${A2OPD_MODEL_ROOT:-$REPO_ROOT/models}
+export A2OPD_CKPT_ROOT=${A2OPD_CKPT_ROOT:-$REPO_ROOT/checkpoints}
+export A2OPD_RESULT_ROOT=${A2OPD_RESULT_ROOT:-$REPO_ROOT/results}
+export A2OPD_EXP_RESULT_ROOT=${A2OPD_EXP_RESULT_ROOT:-$A2OPD_RESULT_ROOT/benchmark_eval}
+export A2OPD_DISTRIBUTION_KL_RESULT_ROOT=${A2OPD_DISTRIBUTION_KL_RESULT_ROOT:-$A2OPD_RESULT_ROOT/distribution_kl}
 
-# G-OPD training data (override OPD_PUBLIC_DATA_ROOT to your local copy).
-export OPD_PUBLIC_DATA_ROOT=${OPD_PUBLIC_DATA_ROOT:-$OPD_DATA_ROOT/training}
-export OPD_MATH_TRAIN_FILE=${OPD_MATH_TRAIN_FILE:-$OPD_PUBLIC_DATA_ROOT/G-OPD-Training-Data/DeepMath-103K/train_filtered_level6.parquet}
-export OPD_MATH_TEST_FILE=${OPD_MATH_TEST_FILE:-$OPD_PUBLIC_DATA_ROOT/G-OPD-Training-Data/MathTestTotal/test.parquet}
-export OPD_CODE_TRAIN_FILE=${OPD_CODE_TRAIN_FILE:-$OPD_PUBLIC_DATA_ROOT/G-OPD-Training-Data/Eurus/code_train.parquet}
-export OPD_CODE_VAL_FILE=${OPD_CODE_VAL_FILE:-$OPD_PUBLIC_DATA_ROOT/G-OPD-Training-Data/Eurus/code_validation.parquet}
+export A2OPD_MATH_TRAIN_FILE=${A2OPD_MATH_TRAIN_FILE:-$A2OPD_DATA_ROOT/math/train.parquet}
+export A2OPD_MATH_TEST_FILE=${A2OPD_MATH_TEST_FILE:-$A2OPD_DATA_ROOT/math/test.parquet}
+export A2OPD_CODE_TRAIN_FILE=${A2OPD_CODE_TRAIN_FILE:-$A2OPD_DATA_ROOT/code/train.parquet}
+export A2OPD_CODE_VAL_FILE=${A2OPD_CODE_VAL_FILE:-$A2OPD_DATA_ROOT/code/validation.parquet}
 
 # Vendored verl (see README); not always pip-installed in conda env.
 export PYTHONPATH="${REPO_ROOT}/verl:${PYTHONPATH:-}"

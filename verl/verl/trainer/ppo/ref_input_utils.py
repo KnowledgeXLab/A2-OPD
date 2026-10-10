@@ -15,10 +15,10 @@
 Utilities for preparing reference / proxy model inputs when the ref model uses a
 different tokenizer, chat template, or both.
 
-Phase 0/1 cross-tokenizer hetero OPD:
-  - Text-bridge responses: primary decode -> ref encode
-  - Exact text-span alignment from each primary token to one or more ref tokens
-  - Teacher log-prob sums aligned back to the primary response length
+When student and teacher use different tokenizers:
+  - Bridge via text: decode with the primary tokenizer, re-encode with the ref tokenizer
+  - Align each primary token to one or more ref tokens by matching text spans
+  - Sum teacher log-probs on ref tokens and map them back to primary response length
 
 Cross-tokenizer top-k OPD:
   - Map a primary token id to a ref token id when both single tokens decode to

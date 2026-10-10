@@ -21,7 +21,7 @@ _a2opd_parse_student_model_name() {
 _a2opd_restore_student_tokenizer() {
     local merged_hf="$1"
     local student_name="$2"
-    local student_root="${OPD_PUBLIC_MODEL_ROOT}/${student_name}"
+    local student_root="${A2OPD_MODEL_ROOT}/${student_name}"
     local tok_file
 
     if [[ ! -d "$student_root" ]]; then

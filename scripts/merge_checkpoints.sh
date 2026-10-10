@@ -16,7 +16,7 @@ VERL_ROOT="${REPO_ROOT}/verl"
 # shellcheck source=opd_paths.sh
 source "${REPO_ROOT}/scripts/opd_paths.sh"
 
-export CKPT_ROOT="${CKPT_ROOT:-${OPD_A2OPD_MODEL_ROOT}/A2OPD@16-math}"
+export CKPT_ROOT="${CKPT_ROOT:-${A2OPD_CKPT_ROOT}/A2OPD@16-math}"
 CONDA_SH="${CONDA_SH:-${HOME}/miniconda3/etc/profile.d/conda.sh}"
 CONDA_ENV_PATH="${CONDA_ENV_PATH:-${CONDA_PREFIX:-${HOME}/miniconda3/envs/a2opd}}"
 

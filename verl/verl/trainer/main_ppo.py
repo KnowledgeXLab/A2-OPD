@@ -303,7 +303,7 @@ class TaskRunner:
             if tokenizers_need_cross_token_bridge(tokenizer, ref_tokenizer):
                 print(
                     "Primary and ref tokenizers differ; cross-tokenizer text bridge "
-                    "will be enabled for teacher+ during hetero OPD."
+                    "will be enabled for teacher log-prob computation."
                 )
             ref_base_model_path = ref_model_config.get("base_model_path", None)
             if ref_base_model_path is not None:

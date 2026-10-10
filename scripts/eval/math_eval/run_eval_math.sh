@@ -65,7 +65,7 @@ resolve_math_eval_model() {
         MODEL_NAME=${MODEL_NAME:-$(resolve_model_name "$MODEL_PATH")}
     else
         EXPERIMENT_NAME=${EXPERIMENT_NAME:-naive_qwen3-4b_mopd}
-        CKPT_ROOT=${CKPT_ROOT:-$OPD_MULTI_OPD_MODEL_ROOT/${EXPERIMENT_NAME}}
+        CKPT_ROOT=${CKPT_ROOT:-$A2OPD_CKPT_ROOT/${EXPERIMENT_NAME}}
         CKPT_STEP=${CKPT_STEP:-20}
         for candidate in \
             "${CKPT_ROOT}/global_step_${CKPT_STEP}/actor/merged_hf" \
@@ -119,16 +119,6 @@ resolve_math_eval_model() {
 # Logs: logs/math_eval/math_eval_<MODEL_NAME>_<timestamp>.log
 #       plus symlink math_eval_<MODEL_NAME>_latest.log
 
-# MODEL_PATH=$OPD_PUBLIC_MODEL_ROOT/Qwen2.5-Math-7B-Instruct
-# MODEL_PATH=$OPD_PUBLIC_MODEL_ROOT/Qwen3-4B
-# MODEL_PATH=$OPD_TEACHER_MODEL_ROOT/Qwen3-4B-Non-Thinking-RL-Math-Step500
-
-# EXPERIMENT_NAME=spin_qwen3-4b_mopd_sparse_exclusive_all_layers
-# EXPERIMENT_NAME=spin_qwen3-4b_mopd_sparse_exclusive_stride_4
-# EXPERIMENT_NAME=spin_qwen3-4b_mopd_math_code_if_sparse_exclusive_all_layers
-# EXPERIMENT_NAME=naive_qwen3-4b_mopd_math_code_if
-# CKPT_STEP=70
-
 if [[ -z "${MATH_EVAL_LOGGING_ACTIVE:-}" ]]; then
     resolve_math_eval_model
     export MATH_EVAL_MODEL_RESOLVED=1
@@ -148,12 +138,12 @@ set -x
 nvidia-smi || true
 
 cd "$SCRIPT_DIR"
-EVAL_OUTPUT_ROOT=${EVAL_OUTPUT_ROOT:-$OPD_EXP_RESULT_ROOT/math_eval_outputs}
+EVAL_OUTPUT_ROOT=${EVAL_OUTPUT_ROOT:-$A2OPD_EXP_RESULT_ROOT/math_eval_outputs}
 if [[ -z "${TEST_FILES:-}" ]]; then
-    if [[ -f "$OPD_DATA_ROOT/training/MathTestTotal/test.parquet" ]]; then
-        TEST_FILES="$OPD_DATA_ROOT/training/MathTestTotal/test.parquet"
+    if [[ -f "$A2OPD_DATA_ROOT/math/test.parquet" ]]; then
+        TEST_FILES="$A2OPD_DATA_ROOT/math/test.parquet"
     else
-        TEST_FILES="$OPD_DATA_ROOT/training/MathTestTotal/test-sampled_10pct.parquet"
+        TEST_FILES="$A2OPD_DATA_ROOT/math/test-sampled_10pct.parquet"
         echo "Warning: full MathTestTotal/test.parquet is unavailable; using 10% sample: $TEST_FILES" >&2
     fi
 fi

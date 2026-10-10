@@ -3,8 +3,8 @@
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)"
 # shellcheck source=../../../opd_paths.sh
 source "$REPO_ROOT/scripts/opd_paths.sh"
-export HUMANEVAL_OVERRIDE_PATH="${OPD_DATA_ROOT}/benchmarks/code/Humaneval_Plus/HumanEvalPlus.jsonl"
-export MBPP_OVERRIDE_PATH="${OPD_DATA_ROOT}/benchmarks/code/Mbpp_Plus/MbppPlus.jsonl"
+export HUMANEVAL_OVERRIDE_PATH="${A2OPD_DATA_ROOT}/code/benchmarks/Humaneval_Plus/HumanEvalPlus.jsonl"
+export MBPP_OVERRIDE_PATH="${A2OPD_DATA_ROOT}/code/benchmarks/Mbpp_Plus/MbppPlus.jsonl"
 
 # Set defaults if not specified - fix argument assignments
 DATASET=${1:-humaneval}

@@ -1,20 +1,19 @@
-# Master switch. When false, legacy static-lambda P-OPD is used.
-enable: false
+# Master switch. Set false to fall back to legacy static-lambda P-OPD.
+enable: true
 
 # Macro layer: adaptive trust-region budget B_k.
 #   budget_adaptive_enable=true  -> B_k changes over training
 #   budget_adaptive_enable=false -> fixed B from budget_init_* only
-budget_adaptive_enable: true
+budget_adaptive_enable: false
 
 # When budget_adaptive_enable=true, choose the adaptation signal:
-#   proxy_kl   - each OPD step: B_k = current-batch teacher proxy displacement (default)
-#   target_transfer_kl - EMA of KL(softmax(log pi_ref+d) || pi_ref), estimated
-#                        on the OPD top-k candidate set
-#   val_reward - periodic Adam-SNR update from a2opd validation reward
-budget_adaptive_source: proxy_kl
+#   proxy_kl           - each OPD step: B_k = current-batch teacher proxy displacement
+#   target_transfer_kl - EMA of KL(softmax(log pi_ref+d) || pi_ref) on OPD top-k candidates
+#   val_reward         - periodic Adam-SNR update from a2opd validation reward
+budget_adaptive_source: target_transfer_kl
 
 # Meso layer: dual update adjusts lambda to track the current budget B.
-lambda_dual_enable: true
+lambda_dual_enable: false
 
 # Micro layer: token emphasis via I_t estimated on student top-k candidates.
 # Requires algorithm.hetero_distill.opd_top_k > 0.
@@ -44,7 +43,7 @@ budget_beta2: 0.99
 budget_epsilon: 1.0e-8
 
 # target_transfer_kl source only: B_k = (1-tau) B_{k-1} + tau B_tr_hat.
-budget_transfer_ema_tau: 0.05
+budget_transfer_ema_tau: 0.02
 
 # val_reward source only: run data.a2opd_val_files every K global steps.
 budget_update_interval: 10

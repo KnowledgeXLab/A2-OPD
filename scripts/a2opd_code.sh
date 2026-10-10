@@ -7,9 +7,6 @@ export PYTHONFAULTHANDLER=1
 export RAY_DEDUP_LOGS=1
 export RAY_BACKEND_LOG_LEVEL="${RAY_BACKEND_LOG_LEVEL:-info}"
 export CUDA_LAUNCH_BLOCKING=1
-# NOTE: do NOT set PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True here.
-# vLLM CuMemAllocator (used by rollout sleep/wake when free_cache_engine=true)
-# asserts expandable_segments is disabled.
 export NCCL_DEBUG=WARN
 export NCCL_TIMEOUT=7200
 export TORCH_DISTRIBUTED_DEBUG=INFO
@@ -20,7 +17,6 @@ cst_date() { TZ='UTC-8' date "$@"; }
 
 export RAY_memory_usage_threshold=0.99
 
-: "${WANDB_API_KEY:?Set WANDB_API_KEY before running}"
 export WANDB_MODE=online
 export USED_MODEL="no_api"
 
@@ -38,13 +34,13 @@ source "${REPO_ROOT}/scripts/opd_paths.sh"
 cd "${VERL_ROOT}"
 export PYTHONPATH="${VERL_ROOT}:${PYTHONPATH:-}"
 
-train_files="${train_files:-${OPD_CODE_TRAIN_FILE}}"
-test_files="${test_files:-${OPD_CODE_VAL_FILE}}"
+train_files="${train_files:-${A2OPD_CODE_TRAIN_FILE}}"
+test_files="${test_files:-${A2OPD_CODE_VAL_FILE}}"
 code_reward_path="${VERL_ROOT}/verl/utils/reward_score/code_eval_reward/__init__.py"
 
-student_model_path="${OPD_PUBLIC_MODEL_ROOT}/${student_model_name}"
-teacher_model_path="${OPD_PUBLIC_MODEL_ROOT}/${teacher_model_name}"
-teacher_base_model_path="${OPD_PUBLIC_MODEL_ROOT}/${teacher_base_model_name}"
+student_model_path="${A2OPD_MODEL_ROOT}/${student_model_name}"
+teacher_model_path="${A2OPD_MODEL_ROOT}/${teacher_model_name}"
+teacher_base_model_path="${A2OPD_MODEL_ROOT}/${teacher_base_model_name}"
 
 today=$(cst_date +%Y%m%d_%H%M)
 today_sec=$(cst_date +%Y%m%d_%H%M%S)
@@ -53,16 +49,6 @@ use_opd=true
 opd_top_k=${opd_top_k:-16}
 lambda_vals=1.0
 student_rollout_n=1
-
-a2opd_enable=${a2opd_enable:-true}
-a2opd_budget_adaptive_enable=${a2opd_budget_adaptive_enable:-false}
-a2opd_budget_adaptive_source=${a2opd_budget_adaptive_source:-target_transfer_kl}
-a2opd_budget_transfer_ema_tau=${a2opd_budget_transfer_ema_tau:-0.02}
-a2opd_lambda_dual_enable=${a2opd_lambda_dual_enable:-false}
-a2opd_token_sampling_enable=${a2opd_token_sampling_enable:-false}
-a2opd_baseline_mode=${a2opd_baseline_mode:-state}
-a2opd_lambda_init=${a2opd_lambda_init:-1.0}
-a2opd_lambda_eta=${a2opd_lambda_eta:-1}
 
 actor_param_offload=true
 opd_parallel_student_base=false
@@ -109,12 +95,12 @@ while [[ $# -gt 0 ]]; do
 done
 set -- "${extra_args[@]}"
 
-output_model_name="S_${student_tag}-T_${teacher_tag}-TopK${opd_top_k}-${a2opd_baseline_mode}"
+output_model_name="S_${student_tag}-T_${teacher_tag}-TopK${opd_top_k}"
 
 resolve_run_from_resume_path() {
     local rp resolved project_dir rel
     rp="$(readlink -f "$1")"
-    project_dir="$(readlink -f "${OPD_A2OPD_MODEL_ROOT}/${project_name}")"
+    project_dir="$(readlink -f "${A2OPD_CKPT_ROOT}/${project_name}")"
     if [[ "$rp" != "${project_dir}/"* ]]; then
         echo "ERROR: resume_path must be under ${project_dir}, got: $1" >&2
         return 1
@@ -134,7 +120,7 @@ if [[ -n "$resume_path" ]]; then
     )
 else
     experiment_name="${output_model_name}_A2OPD_${today}"
-    output_path="${OPD_A2OPD_MODEL_ROOT}/${project_name}/${experiment_name}"
+    output_path="${A2OPD_CKPT_ROOT}/${project_name}/${experiment_name}"
 fi
 
 log_dir="${REPO_ROOT}/logs/code"
@@ -168,7 +154,6 @@ log_info "student=${student_model_path}"
 log_info "teacher=${teacher_model_path} (base=${teacher_base_model_path})"
 log_info "train_files=${train_files}"
 log_info "val_files=${test_files}"
-log_info "a2opd enable=${a2opd_enable} budget_adaptive=${a2opd_budget_adaptive_enable} budget_source=${a2opd_budget_adaptive_source} budget_transfer_ema_tau=${a2opd_budget_transfer_ema_tau} lambda_dual=${a2opd_lambda_dual_enable} lambda_eta=${a2opd_lambda_eta} token_sampling=${a2opd_token_sampling_enable}"
 log_info "use_opd=${use_opd} opd_top_k=${opd_top_k} resume_path=${resume_path:-<none>}"
 log_info "total_epochs=${total_epochs} total_training_steps=${total_training_steps:-<auto>}"
 log_info "val_n=${val_n} code_eval_workers=${code_eval_workers}"
@@ -207,15 +192,6 @@ python3 -m verl.trainer.main_ppo \
     +algorithm.hetero_distill.update_mode=$update_mode \
     +algorithm.hetero_distill.opd_top_k=$opd_top_k \
     +algorithm.hetero_distill.opd_parallel_student_base=$opd_parallel_student_base \
-    algorithm.a2opd.enable=$a2opd_enable \
-    algorithm.a2opd.budget_adaptive_enable=$a2opd_budget_adaptive_enable \
-    algorithm.a2opd.budget_adaptive_source=$a2opd_budget_adaptive_source \
-    algorithm.a2opd.budget_transfer_ema_tau=$a2opd_budget_transfer_ema_tau \
-    algorithm.a2opd.lambda_dual_enable=$a2opd_lambda_dual_enable \
-    algorithm.a2opd.token_sampling_enable=$a2opd_token_sampling_enable \
-    algorithm.a2opd.baseline_mode=$a2opd_baseline_mode \
-    algorithm.a2opd.lambda_init=$a2opd_lambda_init \
-    algorithm.a2opd.lambda_eta=$a2opd_lambda_eta \
     data.train_files=$train_files \
     data.val_files=$test_files \
     data.train_batch_size=256 \

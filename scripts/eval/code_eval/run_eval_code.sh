@@ -64,7 +64,7 @@ resolve_code_eval_model() {
         MODEL_NAME=${MODEL_NAME:-$(resolve_model_name "$MODEL_PATH")}
     else
         EXPERIMENT_NAME=${EXPERIMENT_NAME:-naive_qwen3-4b_mopd}
-        CKPT_ROOT=${CKPT_ROOT:-$OPD_MULTI_OPD_MODEL_ROOT/${EXPERIMENT_NAME}}
+        CKPT_ROOT=${CKPT_ROOT:-$A2OPD_CKPT_ROOT/${EXPERIMENT_NAME}}
         CKPT_STEP=${CKPT_STEP:-20}
         for candidate in \
             "${CKPT_ROOT}/global_step_${CKPT_STEP}/actor/merged_hf" \
@@ -136,14 +136,8 @@ resolve_code_eval_model() {
 # Logs: logs/code_eval/code_eval_<MODEL_NAME>_<timestamp>.log
 #       plus symlink code_eval_<MODEL_NAME>_latest.log
 
-# MODEL_PATH=$OPD_PUBLIC_MODEL_ROOT/Qwen3-4B-Instruct
-# MODEL_PATH=$OPD_TEACHER_MODEL_ROOT/Qwen3-4B-Non-Thinking-RL-Code-Step300
-# EXPERIMENT_NAME=naive_qwen3-4b_mopd
-# EXPERIMENT_NAME=spin_qwen3-4b_mopd_sparse_exclusive_all_layers
-# EXPERIMENT_NAME=spin_qwen3-4b_mopd_sparse_exclusive_stride_4
-# EXPERIMENT_NAME=spin_qwen3-4b_mopd_math_code_if_sparse_exclusive_all_layers
-# EXPERIMENT_NAME=naive_qwen3-4b_mopd_math_code_if
-# CKPT_STEP=70
+# MODEL_PATH=$A2OPD_MODEL_ROOT/Qwen3-4B
+
 
 if [[ -z "${CODE_EVAL_LOGGING_ACTIVE:-}" ]]; then
     resolve_code_eval_model
@@ -211,14 +205,14 @@ nvidia-smi || true
 CODE_EVAL_ROOT=${CODE_EVAL_ROOT:-$SCRIPT_DIR}
 cd "$CODE_EVAL_ROOT"
 
-EVAL_OUTPUT_ROOT=${EVAL_OUTPUT_ROOT:-$OPD_EXP_RESULT_ROOT/code_eval_outputs}
+EVAL_OUTPUT_ROOT=${EVAL_OUTPUT_ROOT:-$A2OPD_EXP_RESULT_ROOT/code_eval_outputs}
 
 export PYTHONPATH="${CODE_EVAL_ROOT}/coding/evalplus:${PYTHONPATH:-}"
 # Model-generated code often uses invalid escapes (e.g. "\w", "\+"); Py3.12+ emits
 # SyntaxWarning on every compile and can flood eval logs (millions of lines).
 export PYTHONWARNINGS="${PYTHONWARNINGS:-ignore::SyntaxWarning}"
 
-CODE_BENCHMARK_ROOT=${CODE_BENCHMARK_ROOT:-$OPD_DATA_ROOT/benchmarks/code}
+CODE_BENCHMARK_ROOT=${CODE_BENCHMARK_ROOT:-$A2OPD_DATA_ROOT/code/benchmarks}
 EVALPLUS_DATA_ROOT=${EVALPLUS_DATA_ROOT:-$CODE_BENCHMARK_ROOT}
 DEFAULT_HUMANEVAL_PATH="${EVALPLUS_DATA_ROOT}/Humaneval_Plus/HumanEvalPlus.jsonl"
 DEFAULT_MBPP_PATH="${EVALPLUS_DATA_ROOT}/Mbpp_Plus/MbppPlus.jsonl"
