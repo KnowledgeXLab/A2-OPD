@@ -5,18 +5,18 @@
 ## Rethinking Relative Policy Differences Transfer of On-Policy Distillation
 
 
-<p>
-  <a href="https://arxiv.org/abs/2610.13205"><img src="https://img.shields.io/badge/arXiv-2610.13205-b31b1b?style=flat-square&logo=arxiv&logoColor=white" height="28" alt="arXiv Paper"/></a>
-  &nbsp;
-  <a href="https://www.alphaxiv.org/abs/2610.13205"><img src="https://www.alphaxiv.org/favicon.ico" width="28" height="28" valign="middle" alt=""/><img src="https://img.shields.io/badge/alphaXiv-2610.13205-0066CC?style=flat-square" height="28" valign="middle" alt="alphaXiv"/></a>
-  &nbsp;
-  <a href="https://huggingface.co/papers/2610.13205"><img src="https://img.shields.io/badge/🤗%20Paper-2610.13205-yellow?style=flat-square" height="28" alt="Hugging Face Paper"/></a>
-  &nbsp;
-  <a href="https://huggingface.co/KnowledgeXLab/P-OPD_Experiments"><img src="https://img.shields.io/badge/Models-HuggingFace-FFD21E?style=flat-square&logo=huggingface&logoColor=yellow" height="28" alt="Hugging Face Models"/></a>
-  &nbsp;
-  <a href="https://huggingface.co/datasets/KnowledgeXLab/A2-OPD"><img src="https://img.shields.io/badge/🤗%20Dataset-A2--OPD-yellow?style=flat-square" height="28" alt="Hugging Face Dataset"/></a>
-  &nbsp;
-  <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache--2.0-blue?style=flat-square" height="28" alt="License"/></a>
+<p align="center" style="display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:8px;margin:0;">
+  <a href="https://arxiv.org/abs/2610.13205"><img src="https://img.shields.io/badge/arXiv-2610.13205-b31b1b?style=flat-square&logo=arxiv&logoColor=white" height="28" alt="arXiv Paper" style="display:block;height:28px;"/></a>
+  <a href="https://www.alphaxiv.org/abs/2610.13205" style="display:inline-flex;align-items:center;line-height:0;text-decoration:none;">
+    <span style="position:relative;display:inline-block;line-height:0;">
+      <img src="https://img.shields.io/badge/alphaXiv-2610.13205-0066CC?style=flat-square" height="28" alt="alphaXiv" style="display:block;height:28px;"/>
+      <img src="https://www.alphaxiv.org/favicon.ico" width="14" height="14" alt="" style="position:absolute;left:7px;top:50%;transform:translateY(-50%);"/>
+    </span>
+  </a>
+  <a href="https://huggingface.co/papers/2610.13205"><img src="https://img.shields.io/badge/🤗%20Paper-2610.13205-yellow?style=flat-square" height="28" alt="Hugging Face Paper" style="display:block;height:28px;"/></a>
+  <a href="https://huggingface.co/KnowledgeXLab/P-OPD_Experiments"><img src="https://img.shields.io/badge/Models-HuggingFace-FFD21E?style=flat-square&logo=huggingface&logoColor=yellow" height="28" alt="Hugging Face Models" style="display:block;height:28px;"/></a>
+  <a href="https://huggingface.co/datasets/KnowledgeXLab/A2-OPD"><img src="https://img.shields.io/badge/🤗%20Dataset-A2--OPD-yellow?style=flat-square" height="28" alt="Hugging Face Dataset" style="display:block;height:28px;"/></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache--2.0-blue?style=flat-square" height="28" alt="License" style="display:block;height:28px;"/></a>
 </p>
 
 </div>
