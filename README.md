@@ -6,9 +6,9 @@
 
 
 <p>
-  <a href="https://arxiv.org/abs/2610.09009"><img src="https://img.shields.io/badge/arXiv-2610.09009-b31b1b?style=flat-square&logo=arxiv&logoColor=white" height="28" alt="arXiv Paper"/></a>
+  <a href="https://arxiv.org/abs/2610.13205"><img src="https://img.shields.io/badge/arXiv-2610.13205-b31b1b?style=flat-square&logo=arxiv&logoColor=white" height="28" alt="arXiv Paper"/></a>
   &nbsp;
-  <a href="https://huggingface.co/papers/2610.09009"><img src="https://img.shields.io/badge/🤗%20Paper-2610.09009-yellow?style=flat-square" height="28" alt="Hugging Face Paper"/></a>
+  <a href="https://huggingface.co/papers/2610.13205"><img src="https://img.shields.io/badge/🤗%20Paper-2610.13205-yellow?style=flat-square" height="28" alt="Hugging Face Paper"/></a>
   &nbsp;
   <a href="https://huggingface.co/KnowledgeXLab/P-OPD_Experiments"><img src="https://img.shields.io/badge/Models-HuggingFace-FFD21E?style=flat-square&logo=huggingface&logoColor=yellow" height="28" alt="Hugging Face Models"/></a>
   &nbsp;
@@ -17,7 +17,7 @@
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache--2.0-blue?style=flat-square" height="28" alt="License"/></a>
 </p>
 
-**[<img src="https://img.shields.io/badge/-arXiv-B31B1B?logo=arxiv&logoColor=white" height="16" valign="middle"> arXiv](https://arxiv.org/abs/2610.09009)** · **[<img src="https://www.alphaxiv.org/favicon.ico" width="16" height="16" valign="middle"> alphaXiv](https://www.alphaxiv.org/abs/2610.09009)** · **[🤗 Paper](https://huggingface.co/papers/2610.09009)** · **[Models](https://huggingface.co/KnowledgeXLab/P-OPD_Experiments)** · **[Dataset](https://huggingface.co/datasets/KnowledgeXLab/A2-OPD)**
+**[<img src="https://img.shields.io/badge/-arXiv-B31B1B?logo=arxiv&logoColor=white" height="16" valign="middle"> arXiv](https://arxiv.org/abs/2610.13205)** · **[<img src="https://www.alphaxiv.org/favicon.ico" width="16" height="16" valign="middle"> alphaXiv](https://www.alphaxiv.org/abs/2610.13205)** · **[🤗 Paper](https://huggingface.co/papers/2610.13205)** · **[Models](https://huggingface.co/KnowledgeXLab/P-OPD_Experiments)** · **[Dataset](https://huggingface.co/datasets/KnowledgeXLab/A2-OPD)**
 
 </div>
 
@@ -56,7 +56,7 @@ where $\alpha/\beta$ controls transfer strength.
 
 ## 📰 Updates
 
-* **`2026-10-09`:** 🎉 Code release for paper experiments and analysis.
+* **`2026-10-09`:** 📄 Paper on [arXiv](https://arxiv.org/abs/2610.13205) · 🎉 Code release for paper experiments and analysis.
 
 ## 🛠️ Installation
 
@@ -209,12 +209,13 @@ For questions or feedback:
 If you find this work helpful, please cite:
 
 ```bibtex
-@article{wu2026rethinking,
-  title   = {Rethinking Relative Policy Differences Transfer of On-Policy Distillation},
-  author  = {Wu, Rong and Fu, Daocheng and Yang, Yu and Yang, Xuemeng and Li, Siqi and Zou, Shu and Zhu, Yao and Shi, Botian and Zhang, Bo and Zhang, Cong and Cai, Pinlong and Mei, Jianbiao},
-  year    = {2026},
-  eprint  = {2610.09009},
-  archivePrefix = {arXiv},
-  url     = {https://github.com/KnowledgeXLab/A2-OPD}
+@misc{wu2026rethinkingrelativepolicydifferences,
+      title={Rethinking Relative Policy Differences Transfer of On-Policy Distillation}, 
+      author={Rong Wu and Daocheng Fu and Yu Yang and Xuemeng Yang and Siqi Li and Shu Zou and Yao Zhu and Botian Shi and Bo Zhang and Cong Zhang and Pinlong Cai and Jianbiao Mei},
+      year={2026},
+      eprint={2610.13205},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG},
+      url={https://arxiv.org/abs/2610.13205}, 
 }
 ```
