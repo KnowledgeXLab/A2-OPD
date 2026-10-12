@@ -8,13 +8,13 @@
 <p>
   <a href="https://arxiv.org/abs/2610.13205"><img src="https://img.shields.io/badge/arXiv-2610.13205-b31b1b?style=flat-square&logo=arxiv&logoColor=white" height="28" alt="arXiv Paper"/></a>
   &nbsp;
-  <a href="https://www.alphaxiv.org/abs/2610.13205"><img src="https://img.shields.io/badge/alphaXiv-2610.13205-0066CC?style=flat-square&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHRleHQgeD0iMTIiIHk9IjE3IiB10YW4Y2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSIgZm9udC1zaXplPSIxNSIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsc2VyaWYiIGZvbnQtd2VpZ2h0PSJib2xkIj7OsTwvdGV4dD48L3N2Zz4=" height="28" alt="alphaXiv"/></a>
+  <a href="https://www.alphaxiv.org/abs/2610.13205"><img src="https://www.alphaxiv.org/favicon.ico" width="28" height="28" valign="middle" alt=""/><img src="https://img.shields.io/badge/alphaXiv-2610.13205-0066CC?style=flat-square" height="28" valign="middle" alt="alphaXiv"/></a>
   &nbsp;
-  <a href="https://huggingface.co/papers/2610.13205"><img src="https://img.shields.io/badge/Paper-2610.13205-FFD21E?style=flat-square&logo=huggingface&logoColor=yellow" height="28" alt="Hugging Face Paper"/></a>
+  <a href="https://huggingface.co/papers/2610.13205"><img src="https://img.shields.io/badge/🤗%20Paper-2610.13205-yellow?style=flat-square" height="28" alt="Hugging Face Paper"/></a>
   &nbsp;
-  <a href="https://huggingface.co/KnowledgeXLab/P-OPD_Experiments"><img src="https://img.shields.io/badge/Models-P--OPD-FFD21E?style=flat-square&logo=huggingface&logoColor=black" height="28" alt="Hugging Face Models"/></a>
+  <a href="https://huggingface.co/KnowledgeXLab/P-OPD_Experiments"><img src="https://img.shields.io/badge/Models-HuggingFace-FFD21E?style=flat-square&logo=huggingface&logoColor=yellow" height="28" alt="Hugging Face Models"/></a>
   &nbsp;
-  <a href="https://huggingface.co/datasets/KnowledgeXLab/A2-OPD"><img src="https://img.shields.io/badge/Dataset-A2--OPD-FFD21E?style=flat-square&logo=huggingface&logoColor=black" height="28" alt="Hugging Face Dataset"/></a>
+  <a href="https://huggingface.co/datasets/KnowledgeXLab/A2-OPD"><img src="https://img.shields.io/badge/🤗%20Dataset-A2--OPD-yellow?style=flat-square" height="28" alt="Hugging Face Dataset"/></a>
   &nbsp;
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache--2.0-blue?style=flat-square" height="28" alt="License"/></a>
 </p>
